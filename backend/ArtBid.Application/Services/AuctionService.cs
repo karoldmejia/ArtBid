@@ -1,66 +1,66 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using ArtBid.Application.Interfaces;
 using ArtBid.Application.Repositories;
 using ArtBid.Domain.Entities;
-using ArtBid.Application.Interfaces;
 
 namespace ArtBid.Application.Services
 {
-
-    public class AuctionClosingService : BackgroundService
+    public class AuctionService
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IAuctionNotifier _notifier;
-        private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(5);
+        private readonly IAuctionRepository _auctionRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAuctionNotifier _auctionNotifier;
 
-        public AuctionClosingService(IServiceProvider serviceProvider, IAuctionNotifier notifier)
+        public AuctionService(
+            IAuctionRepository auctionRepository,
+            IUserRepository userRepository,
+            IAuctionNotifier auctionNotifier)
         {
-            _serviceProvider = serviceProvider;
-            _notifier = notifier;
+            _auctionRepository = auctionRepository;
+            _userRepository = userRepository;
+            _auctionNotifier = auctionNotifier;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public Bid PlaceBid(Guid userId, Guid auctionId, decimal amount)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                try
-                {
-                    using var scope = _serviceProvider.CreateScope();
-                    var auctionRepo = scope.ServiceProvider.GetRequiredService<IAuctionRepository>();
-                    var userRepo = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+            var auction = _auctionRepository.GetById(auctionId);
+            if (auction == null)
+                throw new InvalidOperationException("Auction not found");
 
-                    var now = DateTime.UtcNow;
-                    var activeAuctions = auctionRepo.GetActiveAuctions()
-                                                    .Where(a => a.EndTime <= now)
-                                                    .ToList();
+            var user = _userRepository.GetById(userId);
+            if (user == null)
+                throw new InvalidOperationException("User not found");
 
-                    foreach (var auction in activeAuctions)
-                    {
-                        auction.CloseAuction();
-                        auctionRepo.Update(auction);
+            auction.PlaceBid(user, amount);
+            _auctionRepository.Update(auction);
+            _userRepository.Update(user);
 
-                        if (auction.WinnerId.HasValue)
-                        {
-                            var winner = userRepo.GetById(auction.WinnerId.Value);
-                            winner.ConfirmCharge(auction.CurrentPrice);
-                            userRepo.Update(winner);
-                        }
+            var bid = auction.Bids.Last();
+            
+            // Notificar a los clientes
+            _auctionNotifier.NotifyBidPlaced(auctionId, amount, userId);
 
-                        // Llamamos al notifier genérico
-                        await _notifier.NotifyAuctionClosed(auction.Id, auction.Title, auction.WinnerId, auction.CurrentPrice);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error en AuctionClosingService: {ex.Message}");
-                }
-
-                await Task.Delay(_checkInterval, stoppingToken);
-            }
+            return bid;
         }
+
+        public IEnumerable<Auction> GetActiveAuctions()
+        {
+            return _auctionRepository.GetActiveAuctions();
+        }
+
+        public Auction GetById(Guid auctionId)
+        {
+            return _auctionRepository.GetById(auctionId);
+        }
+
+        public IEnumerable<object> GetParticipants(Guid auctionId, Guid requestingUserId)
+{
+    // Verificar que el usuario que pide la info ha participado
+    if (!_auctionRepository.IsParticipant(auctionId, requestingUserId))
+        throw new InvalidOperationException("Usuario no autorizado para ver participantes");
+
+    // Traer los participantes desde el repositorio
+    var participants = _auctionRepository.GetParticipantsByAuction(auctionId);
+    return participants;
+}
     }
 }

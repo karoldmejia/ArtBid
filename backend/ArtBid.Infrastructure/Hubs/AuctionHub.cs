@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using ArtBid.Application.Services;
 
-namespace ArtBid.API.Hubs
+namespace ArtBid.Infrastructure.Hubs
 {
     public class AuctionHub : Hub
     {

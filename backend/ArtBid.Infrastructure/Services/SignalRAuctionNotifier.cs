@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using ArtBid.Application.Interfaces;
-using ArtBid.API.Hubs;
+using ArtBid.Infrastructure.Hubs;
 
 namespace ArtBid.Infrastructure.Services
 {

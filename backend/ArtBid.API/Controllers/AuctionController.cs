@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ArtBid.Application.Services;
 
 [ApiController]
 [Route("artbid/auctions")]

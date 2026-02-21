@@ -4,7 +4,7 @@ using ArtBid.Application.Interfaces;
 using ArtBid.Infrastructure.Repositories;
 using ArtBid.Infrastructure.Persistence;
 using ArtBid.Infrastructure.Services;
-using ArtBid.API.Hubs;
+using ArtBid.Infrastructure.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -84,11 +84,29 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Añadir cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
+app.UseCors("AllowFrontend");
+
 // Asegurar que la base de datos existe
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AuctionDbContext>();
     dbContext.Database.EnsureCreated();
+
+    // Seed inicial
+    DbSeeder.Seed(dbContext);
 }
 
 // Configure the HTTP request pipeline
