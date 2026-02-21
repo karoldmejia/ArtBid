@@ -1,0 +1,15 @@
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/bin/Debug/net10.0/ArtBid.Application.deps.json
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/bin/Debug/net10.0/ArtBid.Application.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/bin/Debug/net10.0/ArtBid.Application.pdb
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/bin/Debug/net10.0/ArtBid.Domain.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/bin/Debug/net10.0/ArtBid.Domain.pdb
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.csproj.AssemblyReference.cache
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.AssemblyInfoInputs.cache
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.AssemblyInfo.cs
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.csproj.CoreCompileInputs.cache
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.A.8FEA287F.Up2Date
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/refint/ArtBid.Application.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ArtBid.Application.pdb
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Application/obj/Debug/net10.0/ref/ArtBid.Application.dll

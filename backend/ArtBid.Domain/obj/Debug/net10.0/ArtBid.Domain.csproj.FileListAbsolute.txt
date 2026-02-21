@@ -1,0 +1,11 @@
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/bin/Debug/net10.0/ArtBid.Domain.deps.json
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/bin/Debug/net10.0/ArtBid.Domain.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/bin/Debug/net10.0/ArtBid.Domain.pdb
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ArtBid.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ArtBid.Domain.AssemblyInfoInputs.cache
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ArtBid.Domain.AssemblyInfo.cs
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ArtBid.Domain.csproj.CoreCompileInputs.cache
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ArtBid.Domain.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/refint/ArtBid.Domain.dll
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ArtBid.Domain.pdb
+/home/karold/Documentos/universidad/sem_7/compu_net_3/ArtBid/ArtBid.Domain/obj/Debug/net10.0/ref/ArtBid.Domain.dll

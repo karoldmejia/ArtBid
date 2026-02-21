@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ArtBid.API/ArtBid.API.csproj" />
+  <Project Path="ArtBid.Application/ArtBid.Application.csproj" />
+  <Project Path="ArtBid.Domain/ArtBid.Domain.csproj" />
+  <Project Path="ArtBid.Infrastructure/ArtBid.Infrastructure.csproj" />
+</Solution>
