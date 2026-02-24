@@ -1,0 +1,172 @@
+.auctions-page {
+    background-color: var(--negro);
+    height: 100%;
+}
+
+.auctions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.auction-card {
+    flex: 1 1 calc(33.333%);
+    max-width: calc(33.333%);
+    height: calc(100vh);
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: var(--negro);
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.auction-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.3s ease;
+}
+
+.auction-card:hover .auction-image {
+    transform: scale(1.05);
+    filter: brightness(0.6);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.auction-card:hover .image-overlay {
+    opacity: 1;
+}
+
+/* Hover content - contenedor principal */
+.hover-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.auction-card:hover .hover-content {
+    opacity: 1;
+}
+
+/* Header pegado abajo */
+.hover-header {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: left;
+    padding: 40px 30px 30px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.8) 0%,
+        transparent 100%
+    );
+}
+
+.artwork-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: var(--blanco);
+    letter-spacing: 0.5px;
+}
+
+.artwork-author {
+    font-size: 16px;
+    margin: 0;
+    color: var(--gris);
+    font-weight: 400;
+}
+
+/* Footer en esquina superior derecha */
+.auction-footer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 15px;
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--gris);
+    margin-top: 70px;
+}
+
+.current-price {
+    color: var(--verde);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.bid-count {
+    color: var(--blanco);
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Loading state */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: var(--blanco);
+    font-size: 20px;
+    background-color: var(--negro);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .auction-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+        height: 50vh;
+    }
+    
+    .artwork-name {
+        font-size: 20px;
+    }
+    
+    .artwork-author {
+        font-size: 14px;
+    }
+    
+    .hover-header {
+        padding: 30px 20px 20px;
+    }
+    
+    .auction-footer {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        gap: 10px;
+    }
+}

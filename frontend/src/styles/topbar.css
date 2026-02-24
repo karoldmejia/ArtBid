@@ -1,0 +1,87 @@
+.topbar {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    background-color: transparent !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--blanco); /* Solo borde inferior */
+    box-sizing: border-box;
+}
+
+/* Sección izquierda */
+.left-nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+/* Título central */
+.center-title {
+    margin-top: 50px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.center-title h1 {
+    font-size: 28px !important;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: var(--blanco) !important;
+}
+
+/* Sección derecha */
+.right-nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* Estilo común para los enlaces */
+.nav-link {
+    color: var(--blanco);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: var(--verde); /* Color al hacer hover */
+}
+
+/* Estilo específico para logout (opcional) */
+.logout:hover {
+    color: var(--gtafito);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .topbar {
+        padding: 0 20px;
+    }
+
+    .center-title h1 {
+        font-size: 20px;
+    }
+
+    .left-nav, .right-nav {
+        gap: 15px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+    }
+}

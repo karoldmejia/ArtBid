@@ -1,5 +1,6 @@
 using ArtBid.Application.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [ApiController]
 [Route("artbid/users")]
@@ -14,21 +15,32 @@ public class UserController : ControllerBase
         _auctionRepo = auctionRepo;
     }
 
+    // Método auxiliar para extraer el userId de forma consistente
+    private Guid? GetCurrentUserId()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            return null;
+            
+        return userId;
+    }
+
     // Perfil del usuario con balance y subastas participadas
     [HttpGet("me")]
     public IActionResult GetProfile()
     {
-        var subClaim = User.FindFirst("sub")?.Value;
-        if (subClaim == null || !Guid.TryParse(subClaim, out var userId))
-            return Unauthorized("User ID not found");
+        var userId = GetCurrentUserId();
+        if (userId == null)
+            return Unauthorized(new { error = "User ID claim not found" });
 
         try
         {
-            var user = _userRepo.GetById(userId);
+            var user = _userRepo.GetById(userId.Value);
             if (user == null)
                 return NotFound("User not found");
 
-            var auctionsParticipated = _auctionRepo.GetAuctionsByUser(userId)
+            var auctionsParticipated = _auctionRepo.GetAuctionsByUser(userId.Value)
                                                    .Select(a => new
                                                    {
                                                        a.Id,
@@ -56,13 +68,13 @@ public class UserController : ControllerBase
     [HttpGet("me/participated")]
     public IActionResult GetParticipatedAuctions()
     {
-        var subClaim = User.FindFirst("sub")?.Value;
-        if (subClaim == null || !Guid.TryParse(subClaim, out var userId))
-            return Unauthorized("User ID not found");
+        var userId = GetCurrentUserId();
+        if (userId == null)
+            return Unauthorized(new { error = "User ID claim not found" });
 
         try
         {
-            var auctions = _auctionRepo.GetAuctionsByUser(userId) // Devuelve todas las subastas donde el usuario hizo al menos una oferta
+            var auctions = _auctionRepo.GetAuctionsByUser(userId.Value)
                                        .Select(a => new
                                        {
                                            a.Id,
@@ -86,13 +98,13 @@ public class UserController : ControllerBase
     [HttpGet("me/published")]
     public IActionResult GetPublishedAuctions()
     {
-        var subClaim = User.FindFirst("sub")?.Value;
-        if (subClaim == null || !Guid.TryParse(subClaim, out var userId))
-            return Unauthorized("User ID not found");
+        var userId = GetCurrentUserId();
+        if (userId == null)
+            return Unauthorized(new { error = "User ID claim not found" });
 
         try
         {
-            var auctions = _auctionRepo.GetAuctionsBySeller(userId) // Devuelve todas las subastas publicadas
+            var auctions = _auctionRepo.GetAuctionsBySeller(userId.Value)
                                        .Select(a => new
                                        {
                                            a.Id,
@@ -112,16 +124,17 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Error: {ex.Message}");
         }
     }
+    
     [HttpGet("me/balance")]
     public IActionResult GetBalance()
     {
-        var subClaim = User.FindFirst("sub")?.Value;
-        if (subClaim == null || !Guid.TryParse(subClaim, out var userId))
-            return Unauthorized("User ID not found");
+        var userId = GetCurrentUserId();
+        if (userId == null)
+            return Unauthorized(new { error = "User ID claim not found" });
 
         try
         {
-            var user = _userRepo.GetById(userId);
+            var user = _userRepo.GetById(userId.Value);
             if (user == null)
                 return NotFound("User not found");
 
@@ -137,5 +150,4 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Error: {ex.Message}");
         }
     }
-
 }

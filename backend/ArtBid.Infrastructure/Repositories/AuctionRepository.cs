@@ -24,6 +24,7 @@ namespace ArtBid.Infrastructure.Repositories
         {
             var auction = _dbContext.Auctions
                 .Include(a => a.Bids)
+                .AsNoTracking()
                 .FirstOrDefault(a => a.Id == auctionId);
 
             return auction ?? throw new InvalidOperationException($"Auction with ID '{auctionId}' not found.");
@@ -33,6 +34,13 @@ namespace ArtBid.Infrastructure.Repositories
         {
             return _dbContext.Auctions
                 .Where(a => a.Status == Domain.Enums.AuctionStatus.Active)
+                .Include(a => a.Bids)
+                .ToList();
+        }
+
+        public IEnumerable<Auction> GetAuctions()
+        {
+            return _dbContext.Auctions
                 .Include(a => a.Bids)
                 .ToList();
         }
@@ -55,8 +63,59 @@ namespace ArtBid.Infrastructure.Repositories
 
         public void Update(Auction auction)
         {
-            _dbContext.Auctions.Update(auction);
-            _dbContext.SaveChanges();
+            try
+            {
+                // Cargar la subasta existente con sus bids
+                var existingAuction = _dbContext.Auctions
+                    .Include(a => a.Bids)
+                    .FirstOrDefault(a => a.Id == auction.Id);
+
+                if (existingAuction == null)
+                    throw new InvalidOperationException("Auction not found");
+
+                // Actualizar propiedades
+                existingAuction.CurrentPrice = auction.CurrentPrice;
+                existingAuction.Status = auction.Status;
+                existingAuction.WinnerId = auction.WinnerId;
+
+                // **IMPORTANTE: Limpiar el tracker de bids para evitar conflictos**
+                foreach (var bid in auction.Bids)
+                {
+                    // Verificar si esta bid ya existe en la BD
+                    var existingBid = existingAuction.Bids.FirstOrDefault(b => b.Id == bid.Id);
+
+                    if (existingBid == null)
+                    {
+                        // Es una NUEVA bid - Crear instancia y forzar estado Added                
+                        var newBid = new Bid(bid.UserId, bid.AuctionId, bid.Amount);
+
+                        // FORZAR el estado a Added ANTES de agregar a la colección
+                        _dbContext.Entry(newBid).State = EntityState.Added;
+
+                        // Agregar a la colección
+                        existingAuction.AddBid(newBid);
+                    }
+                    else
+                    {
+                        // Actualizar bid existente (raro que pase)
+                        _dbContext.Entry(existingBid).CurrentValues.SetValues(bid);
+                    }
+                }
+
+                // Verificar estados ANTES de guardar
+                var entries = _dbContext.ChangeTracker.Entries().ToList();
+                foreach (var entry in entries)
+                {
+                    Console.WriteLine($"  {entry.Entity.GetType().Name} - {entry.State}");
+                }
+
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine($"Error de concurrencia: {ex.Message}");
+                throw new InvalidOperationException("La subasta fue modificada por otro usuario. Intenta nuevamente.");
+            }
         }
 
         // AuctionParticipant

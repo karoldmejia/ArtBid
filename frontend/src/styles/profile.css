@@ -1,0 +1,332 @@
+.profile-page {
+    min-height: 100vh;
+    background-color: var(--negro);
+    padding-top: 70px;
+    color: var(--blanco);
+    width: 100vw;
+}
+
+/* Header del perfil */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 80px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), var(--negro));
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--verde), var(--gtafito));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--blanco);
+    text-transform: uppercase;
+    border: 3px solid var(--gris);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-username {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--blanco);
+}
+
+.profile-email {
+    font-size: 18px;
+    color: var(--gris);
+    margin: 0 0 20px 0;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 40px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--gris);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--blanco);
+}
+
+.stat-value.balance {
+    color: var(--verde);
+    font-size: 24px;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.active {
+    background-color: var(--verde);
+    color: var(--negro);
+}
+
+.status-badge.inactive {
+    background-color: var(--gtafito);
+    color: var(--blanco);
+}
+
+/* Tabs */
+.profile-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 60px;
+}
+
+.tab-button {
+    padding: 15px 30px;
+    background-color: transparent;
+    border: none;
+    color: var(--blanco);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    opacity: 0.6;
+    font-family: 'DM sans', sans-serif;
+
+}
+
+.tab-button:hover {
+    opacity: 1;
+    color: var(--verde);
+}
+
+.tab-button.active {
+    opacity: 1;
+    color: var(--verde);
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--verde);
+}
+
+/* Grid de subastas */
+.auctions-section {
+    padding: 40px 60px;
+}
+
+.auctions-grid-profile {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.auction-card-profile {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--gris);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auction-card-profile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: var(--verde);
+}
+
+.auction-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.auction-image-profile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.auction-card-profile:hover .auction-image-profile {
+    transform: scale(1.05);
+}
+
+.auction-status-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    border: 1px solid;
+}
+
+.auction-status-badge.status-active {
+    border-color: var(--verde);
+    color: var(--verde);
+}
+
+.auction-status-badge.status-ended {
+    border-color: var(--gtafito);
+    color: var(--gtafito);
+}
+
+.auction-status-badge.status-cancelled {
+    border-color: #dc3545;
+    color: #ff6b6b;
+}
+
+.auction-status-badge.status-draft {
+    border-color: var(--gris);
+    color: var(--gris);
+}
+
+.auction-details {
+    padding: 20px;
+}
+
+.auction-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: var(--blanco);
+}
+
+.auction-artwork {
+    font-size: 14px;
+    color: var(--gris);
+    margin: 0 0 15px 0;
+}
+
+.auction-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(199, 188, 93, 0.2);
+}
+
+.current-price {
+    color: var(--verde);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.bid-count {
+    color: var(--blanco);
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.auction-footer-profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.end-date {
+    color: var(--gris);
+}
+
+.winner-badge {
+    background-color: var(--verde);
+    color: var(--negro);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.winner-info {
+    color: var(--gris);
+    font-size: 11px;
+}
+
+.no-auctions {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    color: var(--gris);
+    font-size: 16px;
+    border: 2px dashed var(--gris);
+    border-radius: 12px;
+    opacity: 0.7;
+}
+
+/* Loading */
+.loading-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: var(--blanco);
+    font-size: 20px;
+    background-color: var(--negro);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    .profile-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .profile-tabs {
+        padding: 0 20px;
+        flex-direction: column;
+    }
+
+    .tab-button.active::after {
+        display: none;
+    }
+
+    .auctions-section {
+        padding: 30px 20px;
+    }
+
+    .auctions-grid-profile {
+        grid-template-columns: 1fr;
+    }
+}

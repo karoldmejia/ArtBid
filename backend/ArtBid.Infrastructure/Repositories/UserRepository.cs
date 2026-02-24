@@ -40,5 +40,10 @@ namespace ArtBid.Infrastructure.Repositories
         {
             return _context.Users.Any(u => u.Email == email);
         }
+
+        public IEnumerable<User> GetAll()
+        {
+            return _context.Users.ToList();
+        }
     }
 }

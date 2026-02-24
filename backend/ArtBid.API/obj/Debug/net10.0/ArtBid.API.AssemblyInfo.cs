@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ArtBid.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb126ed00cb8447e46d0a6889de8c133f9d324f7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+796fd7f791f5ac7ebb437d7311e0ec8956a3193e")]
 [assembly: System.Reflection.AssemblyProductAttribute("ArtBid.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ArtBid.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

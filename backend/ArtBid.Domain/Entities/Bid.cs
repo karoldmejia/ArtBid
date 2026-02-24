@@ -8,13 +8,13 @@ namespace ArtBid.Domain.Entities
         public decimal Amount { get; private set; }
         public DateTime Timestamp { get; private set; }
 
-        internal Bid(Guid userId, Guid auctionId, decimal amount)
+        public Bid(Guid userId, Guid auctionId, decimal amount)
         {
             Id = Guid.NewGuid();
             UserId = userId;
             AuctionId = auctionId;
             Amount = amount;
-            Timestamp = DateTime.UtcNow;
+            Timestamp = DateTime.Now;
         }
 
         protected Bid() {}

@@ -21,7 +21,7 @@ namespace ArtBid.Infrastructure.Services
                            AuctionId = auctionId, 
                            Amount = amount, 
                            UserId = userId,
-                           Timestamp = DateTime.UtcNow
+                           Timestamp = DateTime.Now
                        });
         }
 

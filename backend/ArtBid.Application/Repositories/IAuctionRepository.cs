@@ -7,6 +7,7 @@ namespace ArtBid.Application.Repositories
         void Add(Auction auction);
         Auction GetById(Guid auctionId);
         IEnumerable<Auction> GetActiveAuctions();
+        IEnumerable<Auction> GetAuctions();
         void Update(Auction auction);
 
         void AddParticipant(AuctionParticipant participant);

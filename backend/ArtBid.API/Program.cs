@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,10 @@ if (string.IsNullOrEmpty(jwtSecret))
 }
 
 var key = Encoding.ASCII.GetBytes(jwtSecret);
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,10 +43,13 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
+        // Importante: Mapear los claims correctamente
+        NameClaimType = "name",  // Mapea el claim "name" a User.Identity.Name
+        RoleClaimType = "role"   // Si usas roles
     };
     
-    // Importante para SignalR
+    // Eventos mejorados para debugging y SignalR
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
@@ -53,6 +61,28 @@ builder.Services.AddAuthentication(options =>
             {
                 context.Token = accessToken;
             }
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            
+            // Log todos los claims para debugging
+            if (context.Principal != null)
+            {
+                foreach (var claim in context.Principal.Claims)
+                {
+                    Console.WriteLine($"  Claim Type: '{claim.Type}' = '{claim.Value}'");
+                }
+            }
+            
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
             return Task.CompletedTask;
         }
     };
@@ -70,6 +100,7 @@ builder.Services.AddScoped<AuthService>(provider =>
     ));
 
 builder.Services.AddScoped<AuctionService>();
+builder.Services.AddScoped<DemoScriptService>();
 
 // SignalR
 builder.Services.AddSignalR();
@@ -81,8 +112,6 @@ builder.Services.AddHostedService<AuctionClosingService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
 
 // Añadir cors
 builder.Services.AddCors(options =>
@@ -96,6 +125,8 @@ builder.Services.AddCors(options =>
                   .AllowCredentials();
         });
 });
+
+var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 
@@ -118,8 +149,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication();  // Primero autenticación
+app.UseAuthorization();   // Luego autorización
 
 // Mapear hubs de SignalR
 app.MapHub<AuctionHub>("/auctionHub");
@@ -127,3 +158,4 @@ app.MapHub<AuctionHub>("/auctionHub");
 app.MapControllers();
 
 app.Run();
+

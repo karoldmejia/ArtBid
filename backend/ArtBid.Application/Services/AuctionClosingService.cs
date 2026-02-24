@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ArtBid.Application.Repositories;
 using ArtBid.Application.Interfaces;
+using ArtBid.Domain.Enums;
 
 namespace ArtBid.Application.Services
 {
@@ -31,31 +32,46 @@ namespace ArtBid.Application.Services
                     var auctionRepo = scope.ServiceProvider.GetRequiredService<IAuctionRepository>();
                     var userRepo = scope.ServiceProvider.GetRequiredService<IUserRepository>();
 
-                    var now = DateTime.UtcNow;
+                    var now = DateTime.Now;
+
                     var activeAuctions = auctionRepo.GetActiveAuctions()
-                                                    .Where(a => a.EndTime <= now)
-                                                    .ToList();
+                        .Where(a => a.EndTime <= now && a.Status == AuctionStatus.Active)
+                        .ToList();
 
                     foreach (var auction in activeAuctions)
                     {
-                        auction.CloseAuction(); // cambia estado a Ended y asigna ganador
-                        auctionRepo.Update(auction);
 
-                        // Confirmar cobro del ganador
-                        if (auction.WinnerId.HasValue)
+                        if (auction.Status != AuctionStatus.Active)
+                            continue;
+
+                        // Identificar al ganador (la oferta más alta)
+                        var winnerBid = auction.Bids
+                            .OrderByDescending(b => b.Amount)
+                            .ThenByDescending(b => b.Timestamp)
+                            .FirstOrDefault();
+
+                        var activeBidsByUser = auction.Bids
+                            .GroupBy(b => b.UserId)
+                            .Select(g => g.OrderByDescending(b => b.Amount).First()) // La de mayor monto
+                            .ToList();
+
+                        foreach (var bid in activeBidsByUser)
                         {
-                            var winner = userRepo.GetById(auction.WinnerId.Value);
-                            winner.ConfirmCharge(auction.CurrentPrice);
-                            userRepo.Update(winner);
-                            
-                            // Notificar a través del notifier
-                            await _auctionNotifier.NotifyAuctionClosed(auction.Id, auction.WinnerId.Value, auction.CurrentPrice);
+                            var bidder = userRepo.GetById(bid.UserId);
+
+                            if (winnerBid != null && bid.UserId == winnerBid.UserId)
+                            {
+                                userRepo.Update(bidder);
+                            }
                         }
+                        // Cerrar la subasta
+                        auction.CloseAuction();
+                        auctionRepo.Update(auction);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error en AuctionClosingService: {ex.Message}");
+                    Console.WriteLine($"[AuctionClosingService] Error: {ex.Message}");
                 }
 
                 await Task.Delay(_checkInterval, stoppingToken);

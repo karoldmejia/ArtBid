@@ -63,14 +63,12 @@ namespace ArtBid.Application.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                // Usar nombres cortos estándar de JWT
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Name, user.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
-            if (!string.IsNullOrEmpty(user.Email))
-                claims.Add(new Claim(ClaimTypes.Email, user.Email));
-
-            if (!string.IsNullOrEmpty(user.Username))
-                claims.Add(new Claim(ClaimTypes.Name, user.Username));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

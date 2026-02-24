@@ -11,7 +11,7 @@ namespace ArtBid.Domain.Entities
         {
             AuctionId = auctionId;
             UserId = userId;
-            JoinedAt = DateTime.UtcNow;
+            JoinedAt = DateTime.Now;
         }
 
         protected AuctionParticipant() { }
